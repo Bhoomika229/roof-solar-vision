@@ -27,8 +27,7 @@ flowchart LR
 > prediction*, or a *documented estimate/assumption*. Panel counts come from real rectangle
 > packing, never `area / panel_area`. Pitch is a regional-prior heuristic, never claimed as a 3D
 > measurement from a single photo. Uncertainty ranges come from softmax statistics and an
-> explicit sensitivity sweep, never from `random.uniform(...)`. See `CLAUDE.md` for the full
-> list of design invariants this repository is built to preserve.
+> explicit sensitivity sweep, never from `random.uniform(...)`.
 
 ## Overview
 
@@ -43,8 +42,8 @@ explanations at every stage.
 Manual rooftop-solar assessment does not scale. Automating it requires more than a segmentation
 model: usable area depends on obstacle geometry and installation safety margins, panel count
 depends on real 2D packing (not an area ratio), and any number handed to a homeowner or planner
-needs an honest uncertainty range. This project was built as a research-oriented portfolio piece
-demonstrating that full pipeline, end to end, on top of a real published dataset's class taxonomy.
+needs an honest uncertainty range. This project demonstrates that full pipeline, end to end, on 
+top of a real published dataset's class taxonomy.
 
 ## Problem Statement
 
@@ -144,8 +143,8 @@ class imbalance between background/roof pixels and small obstacle classes.
 
 ## Methodology
 
-1. **Segmentation** — two independent single-task models (roof segments; superstructures), same
-   architecture family, same training pipeline.
+1. **Segmentation** — two independent single-task segmentation models for roof segments and
+   superstructures, using a shared training framework and model interface.
 2. **Geometric reasoning** — predicted masks are converted to Shapely polygons
    (`src/geometry/polygons.py`) via OpenCV contour extraction (holes preserved for e.g. a chimney
    fully inside a roof polygon), then:
@@ -235,8 +234,9 @@ project's synthetic generator does not attempt to fully reproduce).
 | Roof-segment orientation (10-class, early-stopped epoch 3) | 0.128 | 0.150 | 0.222 | 0.201 | 0.819 |
 | Superstructure/obstacle detection (9-class, early-stopped epoch 28) | 0.730 | 0.740 | 0.982 | 0.743 | 0.997 |
 
-The orientation task's low mIoU is an honest CPU-only-budget result (early-stopped after 11
-epochs on 84 training images with a 10-way pixel classification problem) — see
+The orientation task's low mIoU is an honest CPU-only-budget result (the best validation mIoU
+was reached at epoch 3 during an 11-epoch training run on 84 training images with a 10-way
+pixel classification problem) — see
 [Limitations](#limitations) — while the obstacle-detection task, an easier problem (mostly
 background plus a few visually distinct shapes), trained well.
 
@@ -300,7 +300,7 @@ pip install -r requirements.txt --index-url https://download.pytorch.org/whl/cpu
 
 ```bash
 # 1. Get data: either place real RID under data/raw/ (see data/README.md), or generate synthetic:
-python scripts/generate_demo_data.py --num-samples 200 --image-size 256 --seed 42
+python scripts/generate_demo_data.py --num-samples 120 --image-size 256 --seed 42
 
 # 2. Discover samples + create reproducible splits:
 python scripts/prepare_data.py --root data/processed/synthetic --splits-dir data/splits
