@@ -1,0 +1,18 @@
+# SegFormer (transformer-based) configuration — see src/models/segformer.py for architecture
+# and fine-tuning-strategy documentation.
+_base_: unet.yaml
+
+dataset:
+  image_size: 512 # matches the pretrained checkpoint's native resolution
+
+model:
+  architecture: "segformer"
+  pretrained_name: "nvidia/segformer-b0-finetuned-ade-512-512"
+  num_classes: 10
+
+train:
+  batch_size: 2 # transformer + 512px on CPU is memory-heavy; kept small for CPU feasibility
+  epochs: 20
+  lr: 0.00006
+  weight_decay: 0.01
+  early_stopping_patience: 6

@@ -1,0 +1,44 @@
+# --- Core deep learning ---
+torch>=2.2,<3.0
+torchvision>=0.17,<1.0
+
+# --- Transformer segmentation backbone ---
+transformers>=4.38
+safetensors>=0.4
+
+# --- Classical CV / geometry ---
+opencv-python-headless>=4.9
+scikit-image>=0.22
+shapely>=2.0
+scipy>=1.11
+
+# --- Data / numerics ---
+numpy>=1.26,<2.0
+pandas>=2.1
+pyyaml>=6.0
+Pillow>=10.2
+albumentations>=1.4
+# Pinned: albucore (an albumentations dependency) requires stringzilla>=3.10.4, and pip's
+# resolver picks the latest release (5.1.2) which ships no Windows/cp311 wheel and needs the
+# MSVC build toolchain to compile from source. Pin to a version with a prebuilt wheel instead.
+stringzilla==4.6.3
+
+# --- Metrics / ML utilities ---
+scikit-learn>=1.4
+tqdm>=4.66
+
+# --- Visualization ---
+matplotlib>=3.8
+seaborn>=0.13
+
+# --- App ---
+streamlit>=1.32
+
+# --- Testing / quality ---
+pytest>=8.0
+pytest-cov>=4.1
+ruff>=0.3
+
+# --- Notebooks ---
+jupyter>=1.0
+ipykernel>=6.29

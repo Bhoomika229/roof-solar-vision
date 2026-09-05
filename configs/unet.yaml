@@ -1,0 +1,42 @@
+# U-Net baseline configuration (Experiment A/B/C segmentation backbone).
+seed: 42
+
+dataset:
+  # Root directory auto-detected by src/data/dataset.py::discover_dataset_root — accepts either
+  # a prepared RID layout or the synthetic layout produced by scripts/generate_demo_data.py.
+  root: "data/processed/synthetic"
+  splits_dir: "data/splits"
+  image_size: 256
+  segment_scheme: 9 # 5 | 9 | 17 -- see src/data/label_maps.py
+  gsd_m_per_px: 0.10 # documented assumption when the real per-image GSD is unknown
+
+augmentation:
+  enabled: true
+
+model:
+  architecture: "unet"
+  in_channels: 3
+  base_channels: 32
+  depth: 4
+  # num_classes is set per task at train time (segments vs. superstructures); this default is
+  # for the roof-segment task (background + 9 orientation/flat classes = 10).
+  num_classes: 10
+
+train:
+  task: "segment" # "segment" | "superstructure"
+  batch_size: 4
+  epochs: 30
+  lr: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 8
+  ce_weight: 0.5
+  dice_weight: 0.5
+  num_workers: 0
+
+solar:
+  panel_width_m: 1.0
+  panel_height_m: 1.7
+  panel_power_w: 450
+  spacing_m: 0.02
+  roof_edge_margin_m: 0.3
+  obstacle_clearance_m: 0.2
